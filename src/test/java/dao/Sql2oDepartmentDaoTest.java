@@ -9,6 +9,7 @@ import org.sql2o.Sql2o;
 import java.util.Arrays;
 import static org.junit.Assert.*;
 
+
 public class Sql2oDepartmentDaoTest {
 
     private static Connection conn;
@@ -29,12 +30,36 @@ public class Sql2oDepartmentDaoTest {
     @After
     public void tearDown() throws Exception {
         departmentsDao.clearAll();
-//            newsDao.clearAll();
+        newsDao.clearAll();
         usersDao.clearAll();
         System.out.println("clearing database");
         conn.close();
     }
 
+    //helper
+    public Department setUpDepartment (){
+        Department department =  new Department("Servicing", "Repairs", 205);
+        departmentsDao.add(department);
+        return department;
+    }
+    //helper
+    public Department setUpAltDepartment(){
+        Department altDepartment = new Department("Shipping", "Sailing", 329);
+        departmentsDao.add(altDepartment);
+        return altDepartment;
+    }
+    //helper
+    public User setUpUser(){
+        User user = new User("Michelle", "Secretary", "Writing", 2);
+        usersDao.add(user);
+        return user;
+    }
+    //helper
+    public User setUpAltUser(){
+        User altUser = new User("Gideon","Manager", "Oversight", 2);
+        usersDao.add(altUser);
+        return altUser;
+    }
 
     @Test
     public void savesOneInstanceCorrectlyAndGetsRightId_true(){
@@ -122,30 +147,4 @@ public class Sql2oDepartmentDaoTest {
         assertEquals(0, departmentsDao.getAllUsersByDepartment(testDepartment.getId()).size());
     }
 
-    public Department setUpDepartment (){
-        Department department =  new Department("Servicing", "Repairs", 205);
-        departmentsDao.add(department);
-        return department;
-    }
-
-    public Department setUpAltDepartment(){
-        Department altDepartment = new Department("Shipping", "Sailing", 329);
-        departmentsDao.add(altDepartment);
-        return altDepartment;
-    }
-
-    public User setUpUser(){
-        User user = new User("Michelle", "Secretary", "Writing", 2);
-        usersDao.add(user);
-        return user;
-    }
-
-    public User setUpAltUser(){
-        User altUser = new User("Gideon","Manager", "Oversight", 2);
-        usersDao.add(altUser);
-        return altUser;
-    }
-
-
 }
-

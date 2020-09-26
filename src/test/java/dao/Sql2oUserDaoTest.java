@@ -5,8 +5,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.sql2o.Sql2o;
 import org.sql2o.Connection;
-
 import static org.junit.Assert.*;
+
 
 public class Sql2oUserDaoTest {
 
@@ -27,14 +27,24 @@ public class Sql2oUserDaoTest {
 
     @After
     public void tearDown() throws Exception {
-//        departmentDao.clearAll();
-//        newsDao.clearAll();
+        departmentDao.clearAll();
+        newsDao.clearAll();
         userDao.clearAll();
         System.out.println("clearing database");
         conn.close();
     }
-
-
+    //helper
+    public User setUpUser(){
+        User testUser = new User("Millie", "Secretary", "Writer", 12);
+        userDao.add(testUser);
+        return testUser;
+    }
+    //helper
+    public User setUpAltUser(){
+        User testAltUser = new User("Mildred", "Janitor", "Recording", 8);
+        userDao.add(testAltUser);
+        return testAltUser;
+    }
 
     @Test
     public void instantiatesCorrectly(){
@@ -59,7 +69,6 @@ public class Sql2oUserDaoTest {
         assertEquals(0, userDao.getAllUsers().size());
     }
 
-
     @Test
     public void findByIdReturnsCorrectInstanceOfClass(){
         User testUsers = setUpUser();
@@ -78,7 +87,6 @@ public class Sql2oUserDaoTest {
         assertEquals(20, findUser.getDepartmentId());
     }
 
-
     @Test
     public void deletesUserByIdCorrectly(){
         User testUser = setUpUser();
@@ -92,19 +100,6 @@ public class Sql2oUserDaoTest {
         User testAltUser = setUpAltUser();
         userDao.clearAll();
         assertEquals(0, userDao.getAllUsers().size());
-    }
-
-
-    public User setUpUser(){
-        User testUser = new User("Millie", "Secretary", "Writer", 12);
-        userDao.add(testUser);
-        return testUser;
-    }
-
-    public User setUpAltUser(){
-        User testAltUser = new User("Mildred", "Janitor", "Recording", 8);
-        userDao.add(testAltUser);
-        return testAltUser;
     }
 
 }
