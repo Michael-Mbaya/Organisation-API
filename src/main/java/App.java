@@ -32,7 +32,7 @@ public class App {
                 "{\"message\":\"Welcome to the main page of ORGANISATIONAL API.\"}");
 
         //news
-        //postman posts news object (Json Format)
+        //postman posts new News object (Json Format)
         post("/news/new", "application/json", (req, res)->{
             News news = gson.fromJson(req.body(), News.class);
             newsDao.add(news);
@@ -63,7 +63,7 @@ public class App {
         });
 
         //departments
-        //postman posts Department objects (Json format)
+        //postman posts new Department objects (Json format)
         post("/departments/new", "application/json", (req, res)->{
             Department department = gson.fromJson(req.body(), Department.class);
             departmentsDao.add(department);
@@ -96,7 +96,7 @@ public class App {
         });
 
         //users
-
+        //postman posts new User Object (Json Format)
         post("/users/new", "application/json", (req, res)->{
             User user = gson.fromJson(req.body(), User.class);
             usersDao.add(user);
@@ -104,7 +104,7 @@ public class App {
             return gson.toJson(user);
         });
 
-
+        //postman gets List of User Objects
         get("/users", "application/json", (req, res) -> {
             System.out.println(usersDao.getAllUsers());
 
@@ -117,7 +117,7 @@ public class App {
             }
         });
 
-
+        //postman gets User Objects by their id (Json Format)
         get("/users/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
             int userId = Integer.parseInt(req.params("id"));
             User userToFind = usersDao.findUserById(userId);
