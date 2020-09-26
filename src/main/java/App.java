@@ -95,6 +95,37 @@ public class App {
             return gson.toJson(departmentToFind);
         });
 
+        //users
+
+        post("/users/new", "application/json", (req, res)->{
+            User user = gson.fromJson(req.body(), User.class);
+            usersDao.add(user);
+            res.status(201);
+            return gson.toJson(user);
+        });
+
+
+        get("/users", "application/json", (req, res) -> {
+            System.out.println(usersDao.getAllUsers());
+
+            if(usersDao.getAllUsers().size() > 0){
+                return gson.toJson(usersDao.getAllUsers());
+            }
+
+            else{
+                return "{\"message\":\"I'm sorry, but no users are currently listed in the database.\"}";
+            }
+        });
+
+
+        get("/users/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
+            int userId = Integer.parseInt(req.params("id"));
+            User userToFind = usersDao.findUserById(userId);
+            if (userToFind == null){
+                throw new ApiException(404, String.format("No user with the id: \"%s\" exists", req.params("id")));
+            }
+            return gson.toJson(userToFind);
+        });
 
     }
 }
