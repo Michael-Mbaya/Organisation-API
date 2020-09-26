@@ -32,7 +32,7 @@ public class App {
                 "{\"message\":\"Welcome to the main page of ORGANISATIONAL API.\"}");
 
         //news
-        //postman posts news object
+        //postman posts news object (Json Format)
         post("/news/new", "application/json", (req, res)->{
             News news = gson.fromJson(req.body(), News.class);
             newsDao.add(news);
@@ -40,7 +40,7 @@ public class App {
             return gson.toJson(news);
         });
 
-        //postman gets news array of objects
+        //postman gets List of News objects
         get("/news", "application/json", (req, res) -> {
             System.out.println(newsDao.getAll());
 
@@ -52,7 +52,7 @@ public class App {
             }
         });
 
-        //postman gets news objects by their id
+        //postman gets News objects by their id (Json format)
         get("/news/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
             int newsId = Integer.parseInt(req.params("id"));
             News newsToFind = newsDao.findById(newsId);
@@ -63,7 +63,7 @@ public class App {
         });
 
         //departments
-
+        //postman posts Department objects (Json format)
         post("/departments/new", "application/json", (req, res)->{
             Department department = gson.fromJson(req.body(), Department.class);
             departmentsDao.add(department);
@@ -71,7 +71,7 @@ public class App {
             return gson.toJson(department);
         });
 
-
+        //postman gets List of Department Objects
         get("/departments", "application/json", (req, res) -> {
             System.out.println(departmentsDao.getAll());
 
@@ -85,7 +85,7 @@ public class App {
 
         });
 
-
+        //postman gets Department Objects by their id (Json Format)
         get("/departments/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
             int departmentId = Integer.parseInt(req.params("id"));
             Department departmentToFind = departmentsDao.findById(departmentId);
