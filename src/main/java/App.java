@@ -5,6 +5,8 @@ import models.*;
 import dao.*;
 import org.sql2o.Sql2o;
 import org.sql2o.Connection;
+import org.sql2o.Sql2oException;
+
 import java.util.List;
 
 
@@ -95,6 +97,39 @@ public class App {
             return gson.toJson(departmentToFind);
         });
 
+        get("/departments/:id/news", "application/json", (req, res) -> {
+            int departmentId = Integer.parseInt(req.params("id"));
+
+            Department departmentToFind = departmentsDao.findById(departmentId);
+            List<News> allNews;
+//            try {
+//                if (departmentToFind == null) {
+//                    throw new ApiException(404, String.format("No department with the id: \"%s\" exists", req.params("id")));
+//                }
+//            }catch (Sql2oException | ApiException ex){
+//            System.out.println(ex);
+//            }
+            allNews = newsDao.getAllNewsByDepartment(departmentId);
+            res.type("application/json");
+            return gson.toJson(allNews);
+
+        });
+
+//        get("/department/:id/news", "application/json", (req, res) -> {
+//            int departmentId = Integer.parseInt(req.params("id"));
+//
+//            Department departmentToFind = departmentsDao.findById(departmentId);
+//            List<News> allNews;
+//
+//            if (departmentToFind == null){
+//                throw new ApiException(404, String.format("No department with the id: \"%s\" exists", req.params("id")));
+//            }
+//
+//            allNews = newsDao.getNewsByDepartment(departmentId);
+//
+//            return gson.toJson(allNews);
+//        });
+
         //users
         //postman posts new User Object (Json Format)
         post("/users/new", "application/json", (req, res)->{
@@ -118,7 +153,7 @@ public class App {
         });
 
         //postman gets User Objects by their id (Json Format)
-        get("/users/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
+        get("/users/:id", "application/json", (req, res) -> {
             int userId = Integer.parseInt(req.params("id"));
             User userToFind = usersDao.findUserById(userId);
             if (userToFind == null){
