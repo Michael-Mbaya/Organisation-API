@@ -31,6 +31,7 @@ public class App {
         get("/", "application/json", (req, res) ->
                 "{\"message\":\"Welcome to the main page of ORGANISATIONAL API.\"}");
 
+        //postman posts news object
         post("/news/new", "application/json", (req, res)->{
             News news = gson.fromJson(req.body(), News.class);
             newsDao.add(news);
@@ -38,7 +39,7 @@ public class App {
             return gson.toJson(news);
         });
 
-
+        //postman gets news array of objects
         get("/news", "application/json", (req, res) -> {
             System.out.println(newsDao.getAll());
 
@@ -48,10 +49,9 @@ public class App {
             else{
                 return "{\"message\":\"I'm sorry, but no news items are currently listed in the database.\"}";
             }
-
         });
 
-
+        //postman gets news objects by their id
         get("/news/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
             int newsId = Integer.parseInt(req.params("id"));
             News newsToFind = newsDao.findById(newsId);
