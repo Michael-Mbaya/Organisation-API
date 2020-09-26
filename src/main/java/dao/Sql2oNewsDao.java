@@ -127,5 +127,4 @@ public class Sql2oNewsDao implements NewsDao {
     }
 
 
-
 }
