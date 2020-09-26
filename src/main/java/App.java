@@ -31,6 +31,7 @@ public class App {
         get("/", "application/json", (req, res) ->
                 "{\"message\":\"Welcome to the main page of ORGANISATIONAL API.\"}");
 
+        //news
         //postman posts news object
         post("/news/new", "application/json", (req, res)->{
             News news = gson.fromJson(req.body(), News.class);
@@ -59,6 +60,39 @@ public class App {
                 throw new ApiException(404, String.format("No news item with the id: \"%s\" exists", req.params("id")));
             }
             return gson.toJson(newsToFind);
+        });
+
+        //departments
+
+        post("/departments/new", "application/json", (req, res)->{
+            Department department = gson.fromJson(req.body(), Department.class);
+            departmentsDao.add(department);
+            res.status(201);
+            return gson.toJson(department);
+        });
+
+
+        get("/departments", "application/json", (req, res) -> {
+            System.out.println(departmentsDao.getAll());
+
+            if(departmentsDao.getAll().size() > 0){
+                return gson.toJson(departmentsDao.getAll());
+            }
+
+            else {
+                return "{\"message\":\"I'm sorry, but no departments are currently listed in the database.\"}";
+            }
+
+        });
+
+
+        get("/departments/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
+            int departmentId = Integer.parseInt(req.params("id"));
+            Department departmentToFind = departmentsDao.findById(departmentId);
+            if (departmentToFind == null){
+                throw new ApiException(404, String.format("No department with the id: \"%s\" exists", req.params("id")));
+            }
+            return gson.toJson(departmentToFind);
         });
 
 
