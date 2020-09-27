@@ -112,22 +112,22 @@ public class Sql2oDepartmentDaoTest {
 
     }
 
-    @Test
-    public void addsBothUserIdAndDepartmentIdToDB_Correctly(){
-        Department testDepartment = setUpDepartment();
-
-        departmentsDao.add(testDepartment);
-        User testUser = setUpUser();
-        User anotherUser = setUpAltUser();
-
-        departmentsDao.addDepartmentToUser(testDepartment, testUser);
-        departmentsDao.addDepartmentToUser(testDepartment, anotherUser);
-
-        User[] listOfEmployees = {testUser, anotherUser};
-
-        assertEquals(Arrays.asList(listOfEmployees), departmentsDao.getAllUsersByDepartment(testDepartment.getId()));
-
-    }
+//    @Test
+//    public void addsBothUserIdAndDepartmentIdToDB_Correctly(){
+//        Department testDepartment = setUpDepartment();
+//
+//        departmentsDao.add(testDepartment);
+//        User testUser = setUpUser();
+//        User anotherUser = setUpAltUser();
+//
+//        departmentsDao.addDepartmentToUser(testDepartment, testUser);
+//        departmentsDao.addDepartmentToUser(testDepartment, anotherUser);
+//
+//        User[] listOfEmployees = {testUser, anotherUser};
+//
+//        assertEquals(Arrays.asList(listOfEmployees), departmentsDao.getAllUsersByDepartment(testDepartment.getId()));
+//
+//    }
 
     @Test
     public void deletingADepartmentAlsoUpdatesTheJointTable(){

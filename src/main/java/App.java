@@ -66,7 +66,7 @@ public class App {
 
         //departments
         //postman posts new Department objects (Json format)
-        post("/departments/new", "application/json", (req, res)->{
+        post("/department/new", "application/json", (req, res)->{
             Department department = gson.fromJson(req.body(), Department.class);
             departmentsDao.add(department);
             res.status(201);
@@ -88,7 +88,7 @@ public class App {
         });
 
         //postman gets Department Objects by their id (Json Format)
-        get("/departments/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
+        get("/department/:id", "application/json", (req, res) -> { //accept a request in format JSON from an app
             int departmentId = Integer.parseInt(req.params("id"));
             Department departmentToFind = departmentsDao.findById(departmentId);
             if (departmentToFind == null){
@@ -113,9 +113,25 @@ public class App {
             return gson.toJson(departmentNews);
         });
 
+        //get filtered Users (in an array of objects) belonging to a department by the department Id
+        get("/department/:id/users", "application/json", (req, res) -> {
+            int departmentId = Integer.parseInt(req.params("id"));
+
+            Department departmentToFind = departmentsDao.findById(departmentId);
+            List<User> departmentUsers;
+
+            if (departmentToFind == null) {
+                throw new ApiException(404, String.format("No department with the id: \"%s\" exists", req.params("id")));
+            }
+
+            departmentUsers = usersDao.getAllUsersByDepartment(departmentId);
+            res.type("application/json");
+            return gson.toJson(departmentUsers);
+        });
+
         //users
         //postman posts new User Object (Json Format)
-        post("/users/new", "application/json", (req, res)->{
+        post("/user/new", "application/json", (req, res)->{
             User user = gson.fromJson(req.body(), User.class);
             usersDao.add(user);
             res.status(201);
@@ -136,29 +152,13 @@ public class App {
         });
 
         //postman gets User Objects by their id (Json Format)
-        get("/users/:id", "application/json", (req, res) -> {
+        get("/user/:id", "application/json", (req, res) -> {
             int userId = Integer.parseInt(req.params("id"));
             User userToFind = usersDao.findUserById(userId);
             if (userToFind == null){
                 throw new ApiException(404, String.format("No user with the id: \"%s\" exists", req.params("id")));
             }
             return gson.toJson(userToFind);
-        });
-
-        //get filtered Users (in an array of objects) belonging to a department by the department Id
-        get("/department/:id/users", "application/json", (req, res) -> {
-            int departmentId = Integer.parseInt(req.params("id"));
-
-            Department departmentToFind = departmentsDao.findById(departmentId);
-            List<User> departmentUsers;
-
-            if (departmentToFind == null) {
-                throw new ApiException(404, String.format("No department with the id: \"%s\" exists", req.params("id")));
-            }
-
-            departmentUsers = usersDao.getAllUsersByDepartment(departmentId);
-            res.type("application/json");
-            return gson.toJson(departmentUsers);
         });
 
         //FILTERS

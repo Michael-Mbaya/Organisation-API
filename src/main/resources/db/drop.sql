@@ -1,0 +1,2 @@
+DROP DATABASE myorg;
+DROP DATABASE myorg_test;
