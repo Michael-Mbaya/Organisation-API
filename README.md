@@ -23,15 +23,15 @@ As a user of the application you will be able to:
 * 5.PostgreSQL
 
 ##### Run
-* Click on the link provided in the description:  
-or
-* fork the repository, clone your forked repository, run psql < create.sql and gradle run the project
+
+* fork the repository, clone your forked repository in your local machine and gradle run the project on your IntelliJ app.
+
 ## How to use (Behavior)
 ## User Guide
 
 ####View Landing page
-*Method: GET
-*Route: /
+* Method: GET
+* Route: /
 
 #### Create general News: 
 * Method: POST:
