@@ -73,28 +73,6 @@ public class Sql2oNewsDao implements NewsDao {
         }
     }
 
-//    @Override
-//    public List<News> getNewsByDepartment(int departmentId) {
-//        List<News> news = new ArrayList(); //empty list
-//        String joinQuery = "SELECT newsId FROM departments_news WHERE departmentId = :departmentId";
-//
-//        try (Connection con = sql2o.open()) {
-//            List<Integer> allNewsIds = con.createQuery(joinQuery)
-//                    .addParameter("departmentId", departmentId)
-//                    .executeAndFetch(Integer.class);
-//            for (Integer newsId : allNewsIds){
-//                String usersQuery = "SELECT * FROM news WHERE id = :newsId";
-//                news.add(
-//                        con.createQuery(usersQuery)
-//                                .addParameter("newsId", newsId)
-//                                .executeAndFetchFirst(News.class));
-//            }
-//        } catch (Sql2oException ex){
-//            System.out.println(ex);
-//        }
-//        return news;
-//    }
-
     @Override
     public void update(int id, String newNewsTitle, String newNewsContent, int departmentId) {
         String sql = "UPDATE news SET (newsTitle, newsContent, departmentId) = (:newsTitle, :newsContent, :departmentId) WHERE id=:id"; //CHECK!!!

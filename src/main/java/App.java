@@ -5,9 +5,9 @@ import models.*;
 import dao.*;
 import org.sql2o.Sql2o;
 import org.sql2o.Connection;
-import org.sql2o.Sql2oException;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class App {
@@ -97,38 +97,22 @@ public class App {
             return gson.toJson(departmentToFind);
         });
 
+        //get filtered news (in an array of objects) belonging to a department by the department Id
         get("/departments/:id/news", "application/json", (req, res) -> {
             int departmentId = Integer.parseInt(req.params("id"));
 
             Department departmentToFind = departmentsDao.findById(departmentId);
             List<News> allNews;
-//            try {
-//                if (departmentToFind == null) {
-//                    throw new ApiException(404, String.format("No department with the id: \"%s\" exists", req.params("id")));
-//                }
-//            }catch (Sql2oException | ApiException ex){
-//            System.out.println(ex);
-//            }
+
+               if (departmentToFind == null) {
+                    throw new ApiException(404, String.format("No department with the id: \"%s\" exists", req.params("id")));
+                }
+
             allNews = newsDao.getAllNewsByDepartment(departmentId);
             res.type("application/json");
             return gson.toJson(allNews);
 
         });
-
-//        get("/department/:id/news", "application/json", (req, res) -> {
-//            int departmentId = Integer.parseInt(req.params("id"));
-//
-//            Department departmentToFind = departmentsDao.findById(departmentId);
-//            List<News> allNews;
-//
-//            if (departmentToFind == null){
-//                throw new ApiException(404, String.format("No department with the id: \"%s\" exists", req.params("id")));
-//            }
-//
-//            allNews = newsDao.getNewsByDepartment(departmentId);
-//
-//            return gson.toJson(allNews);
-//        });
 
         //users
         //postman posts new User Object (Json Format)
@@ -160,6 +144,22 @@ public class App {
                 throw new ApiException(404, String.format("No user with the id: \"%s\" exists", req.params("id")));
             }
             return gson.toJson(userToFind);
+        });
+
+        //FILTERS
+        exception(ApiException.class, (exception, req, res) -> {
+            ApiException err = exception;
+            Map<String, Object> jsonMap = new HashMap<>();
+            jsonMap.put("status", err.getStatusCode());
+            jsonMap.put("errorMessage", err.getMessage());
+            res.type("application/json");
+            res.status(err.getStatusCode());
+            res.body(gson.toJson(jsonMap));
+        });
+
+
+        after((req, res) ->{
+            res.type("application/json");
         });
 
     }
