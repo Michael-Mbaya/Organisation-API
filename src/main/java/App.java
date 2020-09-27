@@ -98,20 +98,19 @@ public class App {
         });
 
         //get filtered news (in an array of objects) belonging to a department by the department Id
-        get("/departments/:id/news", "application/json", (req, res) -> {
+        get("/department/:id/news", "application/json", (req, res) -> {
             int departmentId = Integer.parseInt(req.params("id"));
 
             Department departmentToFind = departmentsDao.findById(departmentId);
-            List<News> allNews;
+            List<News> departmentNews;
 
                if (departmentToFind == null) {
                     throw new ApiException(404, String.format("No department with the id: \"%s\" exists", req.params("id")));
                 }
 
-            allNews = newsDao.getAllNewsByDepartment(departmentId);
+            departmentNews = newsDao.getAllNewsByDepartment(departmentId);
             res.type("application/json");
-            return gson.toJson(allNews);
-
+            return gson.toJson(departmentNews);
         });
 
         //users
@@ -144,6 +143,22 @@ public class App {
                 throw new ApiException(404, String.format("No user with the id: \"%s\" exists", req.params("id")));
             }
             return gson.toJson(userToFind);
+        });
+
+        //get filtered Users (in an array of objects) belonging to a department by the department Id
+        get("/department/:id/users", "application/json", (req, res) -> {
+            int departmentId = Integer.parseInt(req.params("id"));
+
+            Department departmentToFind = departmentsDao.findById(departmentId);
+            List<User> departmentUsers;
+
+            if (departmentToFind == null) {
+                throw new ApiException(404, String.format("No department with the id: \"%s\" exists", req.params("id")));
+            }
+
+            departmentUsers = usersDao.getAllUsersByDepartment(departmentId);
+            res.type("application/json");
+            return gson.toJson(departmentUsers);
         });
 
         //FILTERS

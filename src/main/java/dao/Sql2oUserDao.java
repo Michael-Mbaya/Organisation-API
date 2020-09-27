@@ -1,5 +1,8 @@
 package dao;
+import models.News;
 import models.User;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.sql2o.Sql2o;
 import org.sql2o.Connection;
@@ -25,7 +28,6 @@ public class Sql2oUserDao implements UserDao{
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }
-
     }
 
     @Override
@@ -42,6 +44,16 @@ public class Sql2oUserDao implements UserDao{
             return con.createQuery("SELECT * FROM users WHERE id=:id")
                     .addParameter("id", id)
                     .executeAndFetchFirst(User.class);
+        }
+    }
+
+    @Override
+    public List<User> getAllUsersByDepartment(int departmentId) {
+        List<News> news = new ArrayList<>();
+        try (Connection con = sql2o.open()) {
+            return con.createQuery("SELECT * FROM users WHERE departmentid = :departmentId")
+                    .addParameter("departmentId", departmentId)
+                    .executeAndFetch(User.class);
         }
     }
 
