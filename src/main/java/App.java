@@ -11,7 +11,17 @@ import java.util.Map;
 
 
 public class App {
+    private static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
+    }
     public static void main(String[] args) {
+
+        port(getHerokuAssignedPort());
+        staticFileLocation("/public");
 
         Sql2oDepartmentDao departmentsDao;
         Sql2oNewsDao newsDao;
@@ -20,11 +30,16 @@ public class App {
         Connection conn;
         Gson gson = new Gson();
 
-        staticFileLocation("/public");
+
+        //For h2
 //        String connectionString = "jdbc:h2:~/jadle.db;INIT=RUNSCRIPT from 'classpath:db/create.sql'";
 //        Sql2o sql2o = new Sql2o(connectionString, "", "");
-        String connectionString = "jdbc:postgresql://localhost:5432/myorg";
-        Sql2o sql2o = new Sql2o(connectionString, "moringa", "moringa");
+        //for postgresql
+//        String connectionString = "jdbc:postgresql://localhost:5432/myorg";
+//        Sql2o sql2o = new Sql2o(connectionString, "moringa", "moringa");
+        //for herokupostgresql
+        String connectionString = "jdbc:postgresql://ec2-3-218-112-22.compute-1.amazonaws.com:5432/d3lp89ash90jh";
+        Sql2o sql2o = new Sql2o(connectionString, "ivmpkcooiunyxg", "bcc572d51ad47ac0fcefe5e5d9623027bb62b0f46d209d36271754a528bfb571");
 
         departmentsDao = new Sql2oDepartmentDao(sql2o);
         newsDao = new Sql2oNewsDao(sql2o);
