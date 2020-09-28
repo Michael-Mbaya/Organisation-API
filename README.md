@@ -109,7 +109,7 @@ As a user of the application you will be able to:
 
 ## BUGS
 
-* Remote Database Connectivity for live site.
+* Having to remember departments by their id is cumbersome. working on ways to change this.
 * If you come across any bugs, please reach out to the contact below
 
 ## CONTACTS
