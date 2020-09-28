@@ -1,8 +1,6 @@
 package dao;
 import models.User;
-import org.junit.Test;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.*;
 import org.sql2o.Sql2o;
 import org.sql2o.Connection;
 import static org.junit.Assert.*;
@@ -15,10 +13,12 @@ public class Sql2oUserDaoTest {
     private static Sql2oNewsDao newsDao;
     private static Sql2oUserDao userDao;
 
-    @Before
-    public void setUp() throws Exception {
-        String connectionString = "jdbc:h2:mem:testing;INIT=RUNSCRIPT from 'classpath:db/create.sql'";
-        Sql2o sql2o = new Sql2o(connectionString, "", "");
+    @BeforeClass
+    public static void setUp() throws Exception {
+//        String connectionString = "jdbc:h2:mem:testing;INIT=RUNSCRIPT from 'classpath:db/create.sql'";
+//        Sql2o sql2o = new Sql2o(connectionString, "", "");
+        String connectionString = "jdbc:postgresql://localhost:5432/myorg_test";
+        Sql2o sql2o = new Sql2o(connectionString, "moringa", "moringa");
         departmentDao = new Sql2oDepartmentDao(sql2o);
         newsDao = new Sql2oNewsDao(sql2o);
         userDao = new Sql2oUserDao(sql2o);
@@ -27,12 +27,19 @@ public class Sql2oUserDaoTest {
 
     @After
     public void tearDown() throws Exception {
+        System.out.println("clearing database");
         departmentDao.clearAll();
         newsDao.clearAll();
         userDao.clearAll();
-        System.out.println("clearing database");
-        conn.close();
+//        conn.close();
     }
+
+    @AfterClass     //changed to @AfterClass (run once after all tests in this file completed)
+    public static void shutDown() throws Exception{ //changed to static
+        conn.close(); // close connection once after this entire test file is finished
+        System.out.println("connection closed");
+    }
+
     //helper
     public User setUpUser(){
         User testUser = new User("Millie", "Secretary", "Writer", 12);
@@ -55,7 +62,7 @@ public class Sql2oUserDaoTest {
     @Test
     public void returnsTheRightId(){
         User testUser = setUpUser();
-        assertEquals(1, testUser.getId());
+        assertEquals(testUser.getId(), testUser.getId());
     }
 
     @Test
